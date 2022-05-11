@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\ErrorController;
+use App\Http\Controllers\GradeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,21 +21,42 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/posts/{post}', function ($post) {
-    $posts = [
-        'my-first-post' => 'Hello, this is my first blog post!',
-        'my-second-post' => 'Now I am getting the hang of this blogging thing.'
-    ];
+Route::get('/posts/{post}', [PostController::class, 'show']);
 
-    if (!array_key_exists($post, $posts)) {
-        abort(404, 'Sorry, that post was not found.');
-    }
+// Index page
+Route::get('/', [WelcomeController::class, 'show']);
 
-    return view('post', [
-        'post' => $posts[$post]
-    ]);
-});
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Grades page
+// Create
+Route::get('grades/create', [GradeController::class, 'create'])->name('grades.create');
+Route::post('/grades', [GradeController::class, 'store'])->name('grades.store');
+// Read
+Route::get('grades/{grade}', [GradeController::class, 'show'])->name('grades.show');
+Route::get('grades', [GradeController::class, 'index'])->name('grades.index');
+// Update
+Route::get('grades/{grade}/edit', [GradeController::class, 'edit'])->name('grades.edit');
+Route::put('/grades/{grade}', [GradeController::class, 'update'])->name('grades.update');
+// Delete
+Route::delete('grades/{grade}', [GradeController::class, 'delete'])->name('grades.delete');
+
+
+// FaQ page
+Route::get('faq', [FaqController::class, 'show']);
+
+// Profile page
+Route::get('profile', [ProfileController::class, 'show']);
+
+
+// Article page
+// Create
+Route::get('articles/create', [ArticlesController::class, 'create'])->name('articles.create');
+Route::post('/articles', [ArticlesController::class, 'store'])->name('articles.store');
+// Read
+Route::get('articles/{article}', [ArticlesController::class, 'show'])->name('articles.show');
+Route::get('articles', [ArticlesController::class, 'index'])->name('articles.index');
+// Update
+Route::get('articles/{article}/edit', [ArticlesController::class, 'edit'])->name('articles.edit');
+Route::put('/articles/{article}', [ArticlesController::class, 'update'])->name('articles.update');
+// Delete
+Route::delete('articles/{article}', [ArticlesController::class, 'delete'])->name('articles.delete');
